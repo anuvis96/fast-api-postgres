@@ -7,35 +7,13 @@ from app.schemas.users_x_rol import CreateUsersXRol, UpdateUsersXRol
 class CRUDUsersXRol(
     CRUDBase[UsersxRol, CreateUsersXRol, UpdateUsersXRol]
 ):
-    async def create(self, *, obj_in: CreateUsersXRol) -> Union[dict, None]:
-        user_data = obj_in.dict()
-        users_x_rol = await self.model.create(
-            user_id=obj_in.user_,
-            rol_id=obj_in.rol_,
-            **user_data,
+  async def get_relation_by_user(self, user_id: int):
+        obj_user_id = await self.model.filter(user_id=user_id).prefetch_related(
+            "rol", "user"
         )
-        return users_x_rol
+        if obj_user_id is None:
+            return None
+        return obj_user_id
 
 
-    async def get_all(
-        self,
-        *,
-        payload: dict = None,
-        skip: int = 0,
-        limit: int = 10,
-    ) -> List:
-        if payload:
-            model = (
-                await self.model.filter(**payload)
-                .offset(skip)
-                .limit(limit)
-                .all()
-                .prefetch_related("user", "rol")
-            )
-        else:
-            model = await self.model.all().prefetch_related("user", "rol")
-        return model
-    
-users_x_rol = CRUDUsersXRol(UsersxRol)
-
-
+users_x_rol = CRUDUsersXRol(model=UsersxRol)

@@ -7,4 +7,4 @@ class CRUDRol(CRUDBase[Rol, CreateRol, UpdateRol]):
     ...
 
 
-rol = CRUDRol(Rol)
+rol = CRUDRol(model=Rol)

@@ -14,10 +14,10 @@ class CRUDBase(ICrudBase[ModelType, CreateSchemaType, UpdateSchemaType]):
     def __init__(self, model: ModelType):
         self.model = model
 
-    async def get_by_id(self, *, id: int) -> Union[dict, None]:
+    async def get_byid(self, *, id: int) -> Union[dict, None]:
         model = await self.model.filter(id=id).first().values()
         if model:
-            return model[0]
+            return model
         return None
 
     async def get_all(

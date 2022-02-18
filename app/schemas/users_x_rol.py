@@ -3,40 +3,25 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from app.schemas.rol import RolInDB
-from app.schemas.user import UserInDB
+class UsersXRolBase(BaseModel):
+    user_id: int
+    rol_id: int
 
-class BaseUsersXRol(BaseModel):
-    user: int
-    rol: int
-
-class CreateUsersXRol(BaseUsersXRol):
+class CreateUsersXRol(UsersXRolBase):
     pass
 
 class UpdateUsersXRol(BaseModel):
+    user_id: Optional[int]
+    rol_id: Optional[int]
+
+class SearchUsersXRol(UpdateUsersXRol):
     pass
 
-class PayloadUsersXRol(BaseModel):
-    user: Optional[int]
-    rol: Optional[int]
-   
-
-
-class UsersXRolInDB(BaseUsersXRol):
+class UsersXRolInDB(UsersXRolBase):
     id: int
     created_at: datetime
-    last_modified: datetime
+    last_modified: datetime   
 
-    class Config:
-        orm_mode = True
-
-
-class UsersXRolResponse(BaseModel):
-    id: int
-    user: Optional[UserInDB]
-    rol: Optional[RolInDB]
-    created_at: datetime
-    last_modified: datetime
-
+class UsersXRol(UsersXRolInDB):
     class Config:
         orm_mode = True

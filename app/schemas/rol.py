@@ -9,8 +9,8 @@ class BaseRol(BaseModel):
     description: str
 
 class PayloadRol(BaseModel):
-    name: str
-    description: str
+    name: Optional[str]
+    description: Optional[str]
 
 class CreateRol(BaseRol):
     pass

@@ -11,3 +11,6 @@ class UsersxRol(Model):
     )
     created_at = fields.DatetimeField(auto_now_add=True)
     last_modified = fields.DatetimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("user", "rol")
