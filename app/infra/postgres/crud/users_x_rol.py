@@ -15,5 +15,13 @@ class CRUDUsersXRol(
             return None
         return obj_user_id
 
+  async def get_relation_by_rol(self, rol_id: int):
+        obj_rol_id = await self.model.filter(rol_id=rol_id).prefetch_related(
+            "user", "rol"
+        )
+        if obj_rol_id is None:
+            return None
+        return obj_rol_id      
+
 
 users_x_rol = CRUDUsersXRol(model=UsersxRol)

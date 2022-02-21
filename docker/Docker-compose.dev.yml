@@ -18,7 +18,7 @@ services:
       - WEB_APP_TITLE=prueba-api-db
       - WEB_APP_DESCRIPTION=Database service for Prueba-Api-Db
       - POSTGRES_DATABASE_URL=postgres://postgres:postgres@prueba-api-db:5432/prueba_api_test
-      - ENVIRONMENT=prod
+      - ENVIRONMENT=dev
       - DEFAULT_EXPIRE_TIME=3600
       - DEFAULT_DATA=True
       - DEBUGGER=False

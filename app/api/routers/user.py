@@ -100,7 +100,8 @@ async def create(new_user: CreateUser):
     status_code=204,
     responses={
         204: {"description": "user update"},
-        404: {"description": "user not found"},
+        401: {"description": "User unauthorized"},
+        404: {"description": "user error"},
     },
 )
 async def update(update_user: UpdateUser, id: int = Path(...)):
@@ -115,6 +116,7 @@ async def update(update_user: UpdateUser, id: int = Path(...)):
     responses={
         204: {"description": "user delete"},
         401: {"description": "User unauthorized"},
+        404: {"description": "user error"},
     },
 )
 async def delete(id: int = Path(...)):
