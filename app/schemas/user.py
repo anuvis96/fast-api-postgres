@@ -1,7 +1,11 @@
 from datetime import datetime
+from lib2to3.pgen2.token import OP
 from typing import Optional
 
 from pydantic import BaseModel
+
+from app.schemas.users_x_rol import UsersXRolInDB
+from app.schemas.rol import RolInDB
 
 
 class BaseUser(BaseModel):
@@ -40,6 +44,16 @@ class CreateUser(BaseUser):
 class UpdateUser(PayloadUser):
     pass
 
+class UserComplete(BaseUser):
+    id: Optional[int]
+    rol: Optional[RolInDB]
+    users_x_rol: Optional[UsersXRolInDB]
+    created_at: Optional[datetime]
+    last_modified: Optional[datetime]
+
+    class Config:
+        orm_mode = True
+    
 class UserInDB(BaseUser):
     id: int
     created_at: Optional[datetime]

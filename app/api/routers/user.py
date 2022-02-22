@@ -10,9 +10,12 @@ from app.schemas.user import (
     CreateUser,
     PayloadUser,
     UpdateUser,
+    UserComplete,
 )
 
 from app.services.user import user_service
+from app.services.rol import rol_service
+from app.services.users_x_rol import users_x_rol_service
 
 
 router = APIRouter()
@@ -56,7 +59,8 @@ async def get_all(
 @router.get(
     "/{id}",
     response_class=JSONResponse,
-    response_model=UserInDB,
+    # Creo schema para obtener la data del rol y las relaciones
+    response_model=UserComplete,
     status_code=200,
     responses={
         200: {"description": "User found"},
@@ -65,10 +69,22 @@ async def get_all(
     },
 )
 async def by_id(id: int = Path(...)):
-    user = await user_service.get_byid(id=id)
-    if user is None:
+    # Obtengo el usuario mediante el id
+    user_data = await user_service.get_byid(id=id)
+    # Obtengo de la tabla intermedia que tiene las relaciones de usuario y rol, su data con el id.
+    users_x_rol_data = await users_x_rol_service.get_byid(id=id)
+    # Para el usuario traigo de la entidad Rol el servicio para poder acceder al getbyid (Acceder a la info de rol), obtener la info del rol por el campo foraneo ["rol_id"] que conecta a la intermedia.
+    rol_data = await rol_service.get_byid(id=users_x_rol_data["rol_id"])
+
+    # Al tener la consulta accedo a la instacia de usuario para tener sus propiedades, ingreso a obtener el rol e igualo la data a mi instacia que trae rol (["rol"])
+    user_data["rol"] = rol_data
+    # Al tener la consulta accedo a la instacia de usuario para tener sus propiedades, ingreso a obtener el users_x_rol e igualo la data a mi instacia que trae users_x_rol (["users_x_rol"])
+    user_data["users_x_rol"] = users_x_rol_data
+
+    if user_data is None:
         raise HTTPException(status_code=404, detail="user not found")
-    return user
+
+    return user_data
 
 
 @router.post(

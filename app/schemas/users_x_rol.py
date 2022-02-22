@@ -20,7 +20,10 @@ class SearchUsersXRol(UpdateUsersXRol):
 class UsersXRolInDB(UsersXRolBase):
     id: int
     created_at: datetime
-    last_modified: datetime   
+    last_modified: datetime  
+
+    class Config:
+        orm_mode = True 
 
 class UsersXRol(UsersXRolInDB):
     class Config:
